@@ -25,7 +25,7 @@ public class ServerApp implements Identifier {
 
       while (true) {
         Socket socket = serverSocket.accept();
-
+        
         BufferedReader in = new BufferedReader(new InputStreamReader(
             new ObjectInputStream(socket.getInputStream())));
         PrintWriter out = new PrintWriter(new ObjectOutputStream(
@@ -43,8 +43,8 @@ public class ServerApp implements Identifier {
           new Thread(new MonitorMessagePrinter(out)).start();
         }
         
-        //socket.close(); // 소켓이 먼저 닫혀서 Printer가 출력을 못함
       }
+      
     } catch (Exception e) {
       System.out.println("오류!");
       e.printStackTrace();
@@ -78,7 +78,7 @@ public class ServerApp implements Identifier {
             ));
 
       } catch (Exception e) {
-        System.out.println("메시지를 읽는 도중 오류가 발생!" + e.getMessage());
+        System.out.println("메시지를 읽는 도중 오류가 발생!");
         e.printStackTrace();
       }
 
@@ -93,13 +93,19 @@ public class ServerApp implements Identifier {
       this.out = out;
     }
 
-    @SuppressWarnings("static-access")
     @Override
     public void run() {
       try (PrintWriter out = this.out) {
         while (true) {
+          
+          Queue<String> localMessageRepo = new LinkedList<>();
+          for (String message : messageQueue) {
+            localMessageRepo.offer(message);
+          }
+          
           if (!messageQueue.isEmpty()) {
-            out.println(messageQueue.poll());
+            out.println(localMessageRepo.poll());
+            messageQueue.poll();
             break;
           }
           Thread.sleep(100);
