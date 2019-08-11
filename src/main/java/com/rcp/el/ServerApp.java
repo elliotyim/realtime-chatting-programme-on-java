@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class ServerApp implements Identifier {
 
-  String[] name = new String[2];
+  String clientName;
   ArrayList<PrintWriter> monitorList = new ArrayList<>();
 
   public void execute() {
@@ -31,13 +31,12 @@ public class ServerApp implements Identifier {
             socket.getOutputStream()));
         System.out.println("클라이언트 요청을 기다리는 중...");
 
-        String identifier = in.readLine();
-        System.out.println("id " + identifier);
-        name = identifier.split("/");
+        long identifier = Long.parseLong(in.readLine());
 
-        if (identifier.startsWith("client-ifjosdhf3")) {
-          new Thread(new ClientMessageReader(socket, in, name[1])).start();
-        } else if (identifier.equals("monitor-dsfie23r98")) {
+        if (identifier == CLIENT_SERIALNO) {
+          clientName = in.readLine();
+          new Thread(new ClientMessageReader(socket, in)).start();
+        } else if (identifier == MONITOR_SERIALNO) {
           monitorList.add(out);
         }
         
@@ -47,33 +46,29 @@ public class ServerApp implements Identifier {
       System.out.println("오류!");
       e.printStackTrace();
     }
-
   }
 
   private class ClientMessageReader implements Runnable {
 
     BufferedReader in;
     Socket socket;
-    String name;
 
-    public ClientMessageReader(Socket socket, BufferedReader in, String name) {
+    public ClientMessageReader(Socket socket, BufferedReader in) {
       this.socket = socket;
       this.in = in;
-      this.name = name;
     }
 
     @Override
     public void run() {
       try (BufferedReader in = this.in) {
-        String ipAddress = String.format("%s",
+        String clientIpAddress = String.format("%s",
             ((InetSocketAddress)socket.getRemoteSocketAddress())
             .getAddress()).substring(1);
         
         String str = in.readLine();
-        
         for (PrintWriter out : monitorList) {
-          out.println("[" + name +" ("+ ipAddress +")"+ "] "
-                + str);
+          out.println("[" + clientName +
+              " ("+ clientIpAddress +")"+ "] "+ str);
           out.flush();
         }
 
@@ -89,6 +84,4 @@ public class ServerApp implements Identifier {
     ServerApp serverApp = new ServerApp();
     serverApp.execute();
   }
-
-
 }

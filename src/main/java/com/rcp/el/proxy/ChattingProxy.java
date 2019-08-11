@@ -35,7 +35,8 @@ public class ChattingProxy implements Proxy<String>, Identifier {
         BufferedReader in = new BufferedReader(new InputStreamReader(
             new ObjectInputStream(socket.getInputStream())))) {
 
-      out.println("client-ifjosdhf3/" + name);
+      out.println(CLIENT_SERIALNO);
+      out.println(name);
       out.println(message);
       out.flush();
 
@@ -46,20 +47,7 @@ public class ChattingProxy implements Proxy<String>, Identifier {
   }
 
   @Override
-  public String[] receive() {
-    // 이 메소드는 서버가 받은 message들을 배열로 리턴한다.
-    //
-    // log[0] : 메세지를 보낸 사람 IP
-    // log[1] : 메세지를 보낸 사람 ID
-    // log[2] : 메세지 내용
-
-    String[] log = new String[3];
-
-    return log;
-  }
-
-  public String receive0() {
-
+  public String receive() {
     String message = null;
 
     try(Socket socket = new Socket(host, port);
@@ -68,17 +56,18 @@ public class ChattingProxy implements Proxy<String>, Identifier {
         BufferedReader in = new BufferedReader(new InputStreamReader(
             new ObjectInputStream(socket.getInputStream())))) {
 
-      out.println("monitor-dsfie23r98");
+      out.println(MONITOR_SERIALNO);
       out.flush();
       
       message = in.readLine();
 
     } catch (Exception e) {
-      System.out.println("데이터 전송 중 오류 발생! ");
+      System.out.println("데이터 수신 중 오류 발생! ");
       e.printStackTrace();
+      System.exit(0);
     }
 
     return message;
   }
-  
+
 }
