@@ -194,7 +194,6 @@ public class Exe {
       if (chattingProxy != null)
         inputText.append(chattingProxy.receive()+"\n");
       inputText.setCaretPosition(inputText.getDocument().getLength());
-      Thread.sleep(100);
     }
 
   }
