@@ -21,7 +21,7 @@ import com.rcp.el.proxy.ChattingProxy;
 
 public class Exe {
 
-  private String checkingHost = "연결하려는 호스트 서버의 IP 주소를 입력해주세요. (ex: localhost or 192.168.0.1)\n";
+  private String checkingHost = "연결하려는 호스트 서버의 IP 주소를 입력해주세요. (ex:192.168.0.1)\n";
   private String checkingPort = "포트번호를 입력해주세요. (8888)\n";
   private String checkingName = "닉네임을 입력해주세요. (최대 8자)\n";
 
@@ -179,6 +179,7 @@ public class Exe {
     createOutputPanel(outputPanel);
     createFrame(inputPanel, outputPanel, frame);
     outputText.requestFocus();
+
     
     while (true) {
       if (host != null && port != 0
@@ -192,6 +193,7 @@ public class Exe {
     while (true) {
       if (chattingProxy != null)
         inputText.append(chattingProxy.receive()+"\n");
+      inputText.setCaretPosition(inputText.getDocument().getLength());
       Thread.sleep(100);
     }
 
