@@ -70,7 +70,7 @@ public class ChattingProxy implements Proxy<String>, Identifier {
 
       out.println("monitor-dsfie23r98");
       out.flush();
-
+      
       message = in.readLine();
 
     } catch (Exception e) {

@@ -10,13 +10,12 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
 
 public class ServerApp implements Identifier {
 
-  Queue<String> messageQueue = new LinkedList<>();
   String[] name = new String[2];
+  ArrayList<PrintWriter> monitorList = new ArrayList<>();
 
   public void execute() {
 
@@ -30,7 +29,6 @@ public class ServerApp implements Identifier {
             new ObjectInputStream(socket.getInputStream())));
         PrintWriter out = new PrintWriter(new ObjectOutputStream(
             socket.getOutputStream()));
-
         System.out.println("클라이언트 요청을 기다리는 중...");
 
         String identifier = in.readLine();
@@ -40,7 +38,7 @@ public class ServerApp implements Identifier {
         if (identifier.startsWith("client-ifjosdhf3")) {
           new Thread(new ClientMessageReader(socket, in, name[1])).start();
         } else if (identifier.equals("monitor-dsfie23r98")) {
-          new Thread(new MonitorMessagePrinter(out)).start();
+          monitorList.add(out);
         }
         
       }
@@ -71,11 +69,13 @@ public class ServerApp implements Identifier {
             ((InetSocketAddress)socket.getRemoteSocketAddress())
             .getAddress()).substring(1);
         
-        messageQueue.offer(String.format("[%s (%s)] %s",
-            name,
-            ipAddress,
-            in.readLine()
-            ));
+        String str = in.readLine();
+        
+        for (PrintWriter out : monitorList) {
+          out.println("[" + name +" ("+ ipAddress +")"+ "] "
+                + str);
+          out.flush();
+        }
 
       } catch (Exception e) {
         System.out.println("메시지를 읽는 도중 오류가 발생!");
@@ -84,42 +84,6 @@ public class ServerApp implements Identifier {
 
     }
   }
-
-  private class MonitorMessagePrinter implements Runnable {
-
-    PrintWriter out;
-
-    public MonitorMessagePrinter(PrintWriter out) {
-      this.out = out;
-    }
-
-    @Override
-    public void run() {
-      try (PrintWriter out = this.out) {
-        while (true) {
-          
-          Queue<String> localMessageRepo = new LinkedList<>();
-          for (String message : messageQueue) {
-            localMessageRepo.offer(message);
-          }
-          
-          if (!messageQueue.isEmpty()) {
-            out.println(localMessageRepo.poll());
-            messageQueue.poll();
-            break;
-          }
-          Thread.sleep(100);
-        }
-      } catch (Exception e) {
-        System.out.println("모니터로 출력 중 에러 발생!");
-        e.printStackTrace();
-      }
-
-    }
-
-  }
-
-
 
   public static void main(String[] args) {
     ServerApp serverApp = new ServerApp();
