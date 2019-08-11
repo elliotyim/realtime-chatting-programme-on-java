@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.rcp.el.Identifier;
+import com.rcp.el.pre_version.Identifier;
 
 public class ChattingProxy implements Proxy<String>, Identifier {
 

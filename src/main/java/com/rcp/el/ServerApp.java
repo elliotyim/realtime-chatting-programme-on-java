@@ -12,6 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.rcp.el.pre_version.Identifier;
+
 public class ServerApp implements Identifier {
 
   String clientName;
@@ -29,7 +31,6 @@ public class ServerApp implements Identifier {
             new ObjectInputStream(socket.getInputStream())));
         PrintWriter out = new PrintWriter(new ObjectOutputStream(
             socket.getOutputStream()));
-        System.out.println("클라이언트 요청을 기다리는 중...");
 
         long identifier = Long.parseLong(in.readLine());
 

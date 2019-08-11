@@ -1,4 +1,4 @@
-package com.rcp.el;
+package com.rcp.el.pre_version;
 
 public interface Identifier {
   final static long CLIENT_SERIALNO = 98274712941324L;

@@ -1,6 +1,6 @@
 // 파워쉘에서 모니터 실행시 커맨드
 // => java -cp bin/main com.rcp.el.Monitor
-package com.rcp.el;
+package com.rcp.el.pre_version;
 
 import java.util.Scanner;
 

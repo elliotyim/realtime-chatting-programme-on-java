@@ -1,6 +1,6 @@
 // 파워쉘에서 클라이언트 실행시 커맨드
 // => java -cp bin/main com.rcp.el.App
-package com.rcp.el;
+package com.rcp.el.pre_version;
 
 import java.util.Scanner;
 
