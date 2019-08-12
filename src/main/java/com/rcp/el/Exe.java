@@ -32,7 +32,7 @@ public class Exe {
   int port;
   String clientName;
 
-  ChattingProxy chattingProxy;
+  ChattingProxy<String> chattingProxy;
 
   private void createInputPanel(JPanel inputPanel) {
     inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
@@ -184,7 +184,7 @@ public class Exe {
     while (true) {
       if (host != null && port != 0
           && clientName != null) {
-        chattingProxy = new ChattingProxy(host, port, clientName);
+        chattingProxy = new ChattingProxy<>(host, port, clientName);
         break;
       }
       Thread.sleep(100);

@@ -7,9 +7,9 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import com.rcp.el.pre_version.Identifier;
+import com.rcp.el.Identifier;
 
-public class ChattingProxy implements Proxy<String>, Identifier {
+public class ChattingProxy<T> implements Proxy<T>, Identifier {
 
   String host;
   int port;
@@ -27,7 +27,7 @@ public class ChattingProxy implements Proxy<String>, Identifier {
   }
 
   @Override
-  public void send(String message) {
+  public void send(T message) {
 
     try(Socket socket = new Socket(host, port);
         PrintWriter out = new PrintWriter(
@@ -46,9 +46,10 @@ public class ChattingProxy implements Proxy<String>, Identifier {
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public String receive() {
-    String message = null;
+  public T receive() {
+    T message = null;
 
     try(Socket socket = new Socket(host, port);
         PrintWriter out = new PrintWriter(
@@ -59,7 +60,7 @@ public class ChattingProxy implements Proxy<String>, Identifier {
       out.println(MONITOR_SERIALNO);
       out.flush();
       
-      message = in.readLine();
+      message = (T)in.readLine();
 
     } catch (Exception e) {
       System.out.println("데이터 수신 중 오류 발생! ");

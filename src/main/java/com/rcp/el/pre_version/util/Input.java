@@ -1,4 +1,4 @@
-package com.rcp.el.util;
+package com.rcp.el.pre_version.util;
 
 import java.util.Scanner;
 

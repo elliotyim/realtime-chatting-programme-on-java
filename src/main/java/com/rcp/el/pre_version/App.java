@@ -4,9 +4,9 @@ package com.rcp.el.pre_version;
 
 import java.util.Scanner;
 
+import com.rcp.el.pre_version.util.Input;
+import com.rcp.el.pre_version.util.Screen;
 import com.rcp.el.proxy.ChattingProxy;
-import com.rcp.el.util.Input;
-import com.rcp.el.util.Screen;
 
 public class App {
   private void execute() {

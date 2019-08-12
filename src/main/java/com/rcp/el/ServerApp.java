@@ -12,8 +12,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.rcp.el.pre_version.Identifier;
-
 public class ServerApp implements Identifier {
 
   String clientName;
